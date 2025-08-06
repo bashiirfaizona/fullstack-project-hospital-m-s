@@ -1,30 +1,25 @@
+// Navbar.jsx
 import React, { useState } from "react";
 import { Link } from "react-scroll";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import Contact from "../layouts/models/Contact";
+import { Link as RouterLink } from "react-router-dom";
 
 const Navbar = () => {
   const [menu, setMenu] = useState(false);
-  const [showForm, setShowForm] = useState(false);
 
   const handleChange = () => setMenu(!menu);
   const closeMenu = () => setMenu(false);
-  const openForm = () => {
-    setShowForm(true);
-    setMenu(false);
-  };
-  const closeForm = () => setShowForm(false);
 
   return (
     <div className="fixed w-full z-50 text-white bg-slate-800 shadow-lg">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center p-4 lg:px-8 px-4">
           {/* Logo */}
-          <Link to="home" spy={true} smooth={true} duration={500} className="flex items-center">
+          <RouterLink to="/" className="flex items-center">
             <h1 className="text-2xl font-bold text-white">
               <span className="text-emerald-400">Faaz</span>Care Hub
             </h1>
-          </Link>
+          </RouterLink>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
@@ -82,12 +77,12 @@ const Navbar = () => {
             >
               Blog
             </Link>
-            <button
-              onClick={openForm}
+            <RouterLink
+              to="/signup"
               className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-md transition-colors font-medium"
             >
-              Contact
-            </button>
+              SignUp
+            </RouterLink>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -166,16 +161,15 @@ const Navbar = () => {
           >
             Blog
           </Link>
-          <button
-            onClick={openForm}
+          <RouterLink
+            to="/signup"
             className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-md transition-colors mx-auto block"
+            onClick={closeMenu}
           >
-            Contact
-          </button>
+            SignUp
+          </RouterLink>
         </div>
       </div>
-
-      {showForm && <Contact closeForm={closeForm} />}
     </div>
   );
 };

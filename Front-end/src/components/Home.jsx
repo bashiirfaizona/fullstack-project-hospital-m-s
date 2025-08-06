@@ -30,7 +30,7 @@ const Home = () => {
 
           <div className="flex flex-col sm:flex-row gap-3"> {/* Reduced gap-4 to gap-3 */}
             <Button title="Explore Services" />
-            <button className="px-5 py-2.5 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white hover:text-slate-800 transition-colors">
+            <button className="px-5 py-2.5 bg-transparent border-2 border-white text-white rounded-lg hover:bg-emerald-600 hover:text-slate-800 transition-colors">
               Emergency Contacts
             </button>
           </div>

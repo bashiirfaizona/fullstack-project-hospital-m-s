@@ -86,7 +86,7 @@ const Doctors = () => {
   ];
 
   return (
-    <section id="doctors" className="text-gray-600 body-font pt-24">
+    <section id="doctors" className="text-gray-600 body-font pt-0"> {/* Changed from pt-24 to pt-0 */}
       <div className="container px-5 py-12 mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -147,7 +147,7 @@ const Doctors = () => {
                   <span className="text-gray-500 text-sm">{doctor.experience} experience</span>
                 </div>
                 <p className="text-gray-600 text-sm mb-3">{doctor.description}</p>
-                <button className="w-full bg-slate-800 hover:bg-slate-700 text-white py-2 px-4 rounded-lg transition-colors text-sm">
+                <button className="w-full bg-slate-800 hover:bg-emerald-600 text-white py-2 px-4 rounded-lg transition-colors text-sm">
                   Book Consultation
                 </button>
               </div>
