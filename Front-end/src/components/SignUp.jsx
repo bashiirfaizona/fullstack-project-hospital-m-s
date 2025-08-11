@@ -1,11 +1,93 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    terms: false,
+  });
+
+  const API_URL = "http://localhost:5000/users"; // Replace with your API endpoint
+
+  // Handle form field changes
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  // CREATE - Sign Up User
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed to create account");
+      alert("Account created successfully!");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        terms: false,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // READ - Get Users
+  const getUsers = async () => {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      console.log("Users:", data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // UPDATE - Update a User
+  const updateUser = async (id, updatedData) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+      if (!res.ok) throw new Error("Failed to update user");
+      console.log("User updated successfully");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // DELETE - Delete a User
+  const deleteUser = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete user");
+      console.log("User deleted successfully");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <section className="bg-gray-50 min-h-screen flex items-center justify-center p-4 pt-24"> {/* Added pt-24 to push content below fixed navbar */}
+    <section className="bg-gray-50 min-h-screen flex items-center justify-center p-4 pt-24">
       <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-8">
-        {/* Logo - Matching website branding */}
         <div className="flex justify-center mb-8">
           <Link to="/" className="flex items-center">
             <h1 className="text-3xl font-bold text-gray-900">
@@ -14,8 +96,7 @@ const SignUp = () => {
           </Link>
         </div>
 
-        {/* Sign Up Form */}
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
@@ -26,6 +107,8 @@ const SignUp = () => {
                 id="firstName"
                 name="firstName"
                 placeholder="faiza"
+                value={formData.firstName}
+                onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
                 required
               />
@@ -39,6 +122,8 @@ const SignUp = () => {
                 id="lastName"
                 name="lastName"
                 placeholder="bashir"
+                value={formData.lastName}
+                onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
                 required
               />
@@ -54,6 +139,8 @@ const SignUp = () => {
               id="email"
               name="email"
               placeholder="faiz@gmail.com"
+              value={formData.email}
+              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
               required
             />
@@ -68,6 +155,8 @@ const SignUp = () => {
               id="phone"
               name="phone"
               placeholder="0712345678"
+              value={formData.phone}
+              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
               required
             />
@@ -82,6 +171,8 @@ const SignUp = () => {
               id="password"
               name="password"
               placeholder="••••••••"
+              value={formData.password}
+              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
               required
             />
@@ -96,6 +187,8 @@ const SignUp = () => {
               id="confirmPassword"
               name="confirmPassword"
               placeholder="••••••••"
+              value={formData.confirmPassword}
+              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
               required
             />
@@ -107,13 +200,22 @@ const SignUp = () => {
                 id="terms"
                 name="terms"
                 type="checkbox"
+                checked={formData.terms}
+                onChange={handleChange}
                 className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
                 required
               />
             </div>
             <div className="ml-3 text-sm">
               <label htmlFor="terms" className="text-gray-700">
-                I agree to the <Link to="/terms" className="text-emerald-600 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-emerald-600 hover:underline">Privacy Policy</Link>
+                I agree to the{" "}
+                <Link to="/terms" className="text-emerald-600 hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link to="/privacy" className="text-emerald-600 hover:underline">
+                  Privacy Policy
+                </Link>
               </label>
             </div>
           </div>
@@ -131,6 +233,13 @@ const SignUp = () => {
           <Link to="/login" className="text-emerald-600 hover:underline font-medium">
             Log in
           </Link>
+        </div>
+
+        {/* Buttons for testing CRUD (optional) */}
+        <div className="mt-4 space-x-2">
+          <button onClick={getUsers} className="bg-gray-200 px-3 py-1 rounded">Read Users</button>
+          <button onClick={() => updateUser(1, { firstName: "Updated" })} className="bg-gray-200 px-3 py-1 rounded">Update User</button>
+          <button onClick={() => deleteUser(1)} className="bg-gray-200 px-3 py-1 rounded">Delete User</button>
         </div>
       </div>
     </section>

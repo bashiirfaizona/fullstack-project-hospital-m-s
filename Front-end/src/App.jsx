@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Public components
+/* ---------------- Public Components ---------------- */
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import About from "./components/About";
@@ -13,7 +13,7 @@ import Footer from "./components/Footer";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
 
-// Admin Layout and Pages
+/* ---------------- Admin Layout & Pages ---------------- */
 import Layout from "./Admin/layout";
 import Dashboard from "./Admin/pages/Dashboard";
 import ManageUsers from "./Admin/pages/ManageUsers";
@@ -29,45 +29,62 @@ import LabTests from "./Admin/pages/LabTests";
 import Pharmacy from "./Admin/pages/Pharmacy";
 import Feedback from "./Admin/pages/Feedback";
 
+/* ---------------- User Layout & Pages ---------------- */
+import UserLayout from "./Users/layout/UserLayout";
+import DashboardHome from "./Users/pages/DashboardHome";
+import MyProfile from "./Users/pages/MyProfile";
+import MyAppointments from "./Users/pages/MyAppointments";
+import MyMedicalRecords from "./Users/pages/MyMedicalRecords";
+import MyLabResults from "./Users/pages/MyLabResults";
+import MyBilling from "./Users/pages/MyBilling";
+import Messages from "./Users/pages/Messages";
+import Settings from "./Users/pages/Settings";
+
 const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Public Routes (with Navbar and Footer) */}
-        <Route path="/*" element={
-          <>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={
-                <main>
-                  <div id="home">
-                    <Home />
-                  </div>
-                  <div id="about">
-                    <About />
-                  </div>
-                  <div id="services">
-                    <Services />
-                  </div>
-                  <div id="doctors">
-                    <Doctors />
-                  </div>
-                  <div id="facilities">
-                    <Facilities />
-                  </div>
-                  <div id="blog">
-                    <Blogs />
-                  </div>
-                </main>
-              } />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-            <Footer />
-          </>
-        } />
+        {/* ---------------- Public Routes ---------------- */}
+        <Route
+          path="/*"
+          element={
+            <>
+              <Navbar />
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <main>
+                      <div id="home">
+                        <Home />
+                      </div>
+                      <div id="about">
+                        <About />
+                      </div>
+                      <div id="services">
+                        <Services />
+                      </div>
+                      <div id="doctors">
+                        <Doctors />
+                      </div>
+                      <div id="facilities">
+                        <Facilities />
+                      </div>
+                      <div id="blog">
+                        <Blogs />
+                      </div>
+                    </main>
+                  }
+                />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<Login />} />
+              </Routes>
+              <Footer />
+            </>
+          }
+        />
 
-        {/* Admin Routes (with Sidebar Layout) */}
+        {/* ---------------- Admin Dashboard ---------------- */}
         <Route path="/admin/*" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
@@ -85,7 +102,19 @@ const App = () => {
           <Route path="feedback" element={<Feedback />} />
         </Route>
 
-        {/* 404 Page - Add this if you want */}
+        {/* ---------------- User Dashboard ---------------- */}
+        <Route path="/user/*" element={<UserLayout />}>
+          <Route path="dashboard" element={<DashboardHome />} />
+          <Route path="profile" element={<MyProfile />} />
+          <Route path="appointments" element={<MyAppointments />} />
+          <Route path="medical-records" element={<MyMedicalRecords />} />
+          <Route path="lab-results" element={<MyLabResults />} />
+          <Route path="billing" element={<MyBilling />} />
+          <Route path="messages" element={<Messages />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+
+        {/* ---------------- 404 Page ---------------- */}
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </Router>
