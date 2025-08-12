@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,8 @@ const SignUp = () => {
     terms: false,
   });
 
-  const API_URL = "http://localhost:5000/users"; // Replace with your API endpoint
+  // Flask backend endpoint
+  const API_URL = "http://localhost:5000/users";
 
   // Handle form field changes
   const handleChange = (e) => {
@@ -26,14 +28,28 @@ const SignUp = () => {
   // CREATE - Sign Up User
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      Swal.fire("Error", "Passwords do not match!", "error");
+      return;
+    }
+
     try {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!res.ok) throw new Error("Failed to create account");
-      alert("Account created successfully!");
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        Swal.fire("Error", data.error || "Failed to create account", "error");
+        return;
+      }
+
+      Swal.fire("Success", data.message, "success");
+
       setFormData({
         firstName: "",
         lastName: "",
@@ -45,43 +61,7 @@ const SignUp = () => {
       });
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  // READ - Get Users
-  const getUsers = async () => {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      console.log("Users:", data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // UPDATE - Update a User
-  const updateUser = async (id, updatedData) => {
-    try {
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      });
-      if (!res.ok) throw new Error("Failed to update user");
-      console.log("User updated successfully");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // DELETE - Delete a User
-  const deleteUser = async (id) => {
-    try {
-      const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete user");
-      console.log("User deleted successfully");
-    } catch (err) {
-      console.error(err);
+      Swal.fire("Error", "Something went wrong!", "error");
     }
   };
 
@@ -233,13 +213,6 @@ const SignUp = () => {
           <Link to="/login" className="text-emerald-600 hover:underline font-medium">
             Log in
           </Link>
-        </div>
-
-        {/* Buttons for testing CRUD (optional) */}
-        <div className="mt-4 space-x-2">
-          <button onClick={getUsers} className="bg-gray-200 px-3 py-1 rounded">Read Users</button>
-          <button onClick={() => updateUser(1, { firstName: "Updated" })} className="bg-gray-200 px-3 py-1 rounded">Update User</button>
-          <button onClick={() => deleteUser(1)} className="bg-gray-200 px-3 py-1 rounded">Delete User</button>
         </div>
       </div>
     </section>

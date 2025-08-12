@@ -23,15 +23,15 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <Link
-              to="home"
+            <RouterLink
+              to="/"
               spy={true}
               smooth={true}
               duration={500}
               className="text-white hover:text-emerald-400 transition-colors font-medium"
             >
               Home
-            </Link>
+            </RouterLink>
             <Link
               to="about"
               spy={true}
